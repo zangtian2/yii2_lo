@@ -11,7 +11,12 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+        'admin' => 'mdm\admin\Module',  //-----------1
+    ],
+    'aliases' =>[
+        '@mdm/admin' => '@vendor/mdmsoft/yii2-admin', //-----------2
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
@@ -44,6 +49,11 @@ return [
             ],
         ],
         ],
+        'authManager' =>[
+            'class' => 'yii\rbac\DbManager',   //--------------------3
+            'defaultRoles' => ['guest'],
+        ],
+        
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,
@@ -54,4 +64,12 @@ return [
         */
     ],
     'params' => $params,
+    'as access' => [
+        'class' => 'mdm\admin\components\AccessControl',
+        'allowActions' => [
+            //允许访问的action
+            //controller/action
+            '*',
+        ]
+    ]
 ];
