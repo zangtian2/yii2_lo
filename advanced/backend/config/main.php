@@ -18,6 +18,18 @@ return [
         '@mdm/admin' => '@vendor/mdmsoft/yii2-admin', //-----------2
     ],
     'components' => [
+//        'view' => [
+//            'theme' => [
+//                // 'basePath' => '@app/themes/spring',  //资源目录
+//                // 'baseUrl' => '@web/themes/spring',   //资源url
+//                'pathMap' => [
+//                    '@app/views' => [
+//                        '@app/themes/spring',   //优先级最高
+//                        '@app/themes/christmas',
+//                    ]
+//                ]
+//            ]
+//        ],
         'request' => [
             'csrfParam' => '_csrf-backend',
         ],
@@ -71,5 +83,8 @@ return [
             //controller/action
             '*',
         ]
+    ],
+    'as theme' => [
+        'class' => 'backend\components\ThemeControl',
     ]
 ];

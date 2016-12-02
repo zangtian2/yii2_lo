@@ -3,18 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\Category;
-use common\models\CategorySearch;
+use backend\models\Test;
+use backend\models\TestSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\Response;
-use yii\widgets\ActiveForm;
-
+use yii\helpers\Url;
 /**
- * CategoryController implements the CRUD actions for Category model.
+ * TestController implements the CRUD actions for Test model.
  */
-class CategoryController extends Controller
+class TestController extends Controller
 {
     /**
      * @inheritdoc
@@ -32,12 +30,12 @@ class CategoryController extends Controller
     }
 
     /**
-     * Lists all Category models.
+     * Lists all Test models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new CategorySearch();
+        $searchModel = new TestSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -47,7 +45,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Displays a single Category model.
+     * Displays a single Test model.
      * @param integer $id
      * @return mixed
      */
@@ -59,27 +57,35 @@ class CategoryController extends Controller
     }
 
     /**
-     * Creates a new Category model.
+     * Creates a new Test model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Category();
+        $model = new Test();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            return $this->redirect(['view', 'id' => $model->id]);
             return $this->redirect(['index']);
         } else {
-            // renderAjax方法，不渲染布局
             return $this->renderAjax('create', [
                 'model' => $model,
             ]);
         }
     }
-
+    
+    /**     
+     * 异步校验表单模型
+     */
+     public function actionValidateForm(){
+        $model = new Test();
+        $model->load(Yii::$app->request->post());
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return \yii\widgets\ActiveForm::validate($modal);
+     }
+     
     /**
-     * Updates an existing Category model.
+     * Updates an existing Test model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -98,7 +104,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Deletes an existing Category model.
+     * Deletes an existing Test model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -111,29 +117,18 @@ class CategoryController extends Controller
     }
 
     /**
-     * Finds the Category model based on its primary key value.
+     * Finds the Test model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Category the loaded model
+     * @return Test the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Category::findOne($id)) !== null) {
+        if (($model = Test::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }
-    
-    /**
-     *  异步校验表单模型
-     */
-    public function actionValidateForm(){
-        //实例化对应model
-        $model = new Category();
-        $model->load(Yii::$app->request->post());
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return ActiveForm::validate($model);
     }
 }
